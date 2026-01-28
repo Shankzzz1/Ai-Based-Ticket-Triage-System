@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      UserRole
+  createdAt DateTime @default(now())
+
+  ticketsCreated Ticket[] @relation("CreatedBy")
+  ticketsAssigned Ticket[] @relation("AssignedTo")
+}
+
+model Ticket {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+
+  status      TicketStatus
+  priority    TicketPriority
+  category    TicketCategory
+
+  confidence  Float?        // AI confidence (later)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  resolvedAt  DateTime?
+
+  createdById String
+  assignedToId String?
+
+  createdBy   User @relation("CreatedBy", fields: [createdById], references: [id])
+  assignedTo  User? @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  sla         SLA?
+}
+
+model SLA {
+  id          String   @id @default(uuid())
+  ticketId    String   @unique
+  dueBy       DateTime
+  breached    Boolean  @default(false)
+
+  ticket      Ticket  @relation(fields: [ticketId], references: [id])
+}
+
+enum UserRole {
+  USER
+  AGENT
+  ADMIN
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum TicketPriority {
+  P1
+  P2
+  P3
+  P4
+}
+
+enum TicketCategory {
+  ACCESS
+  NETWORK
+  SOFTWARE
+  HARDWARE
+  OTHER
+}
