@@ -5,3 +5,4 @@ scikit-learn
 pandas
 numpy
 joblib
+web: gunicorn ml_service.wsgi
