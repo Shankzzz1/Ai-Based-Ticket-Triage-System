@@ -5,6 +5,8 @@ import { escalateTicket } from "./escalation.service";
 export const checkSLABreaches = async () => {
   const now = new Date();
 
+  console.log("🔍 Checking SLA breaches...");
+
   const tickets = await prisma.ticket.findMany({
     where: {
       status: {
@@ -31,11 +33,14 @@ export const checkSLABreaches = async () => {
   });
 
   for (const ticket of tickets) {
+    // ⚠️ Safety: SLA must exist
+    if (!ticket.sla) continue;
+
     const hoursSinceCreated =
       (now.getTime() - ticket.createdAt.getTime()) / (1000 * 60 * 60);
 
     const slaHours =
-      (ticket.sla!.dueBy.getTime() - ticket.createdAt.getTime()) /
+      (ticket.sla.dueBy.getTime() - ticket.createdAt.getTime()) /
       (1000 * 60 * 60);
 
     const agentLoad = ticket.assignedTo
@@ -49,20 +54,31 @@ export const checkSLABreaches = async () => {
       hoursSinceCreated,
       slaHours,
     });
+
     console.log("🤖 AI prediction:", prediction);
 
+    // 🔮 SAVE AI RISK (for frontend + analytics)
+    await prisma.ticket.update({
+      where: { id: ticket.id },
+      data: {
+        aiRisk: prediction.breach_risk,
+      },
+    });
 
-    // 🚨 Early escalation
+    // 🚨 Early escalation (AI-assisted)
     if (prediction.will_breach) {
+      console.log(`🚨 Early escalation for ticket ${ticket.id}`);
       await escalateTicket(ticket.id, ticket.priority);
     }
 
-    // ❌ Actual SLA breach
-    if (now > ticket.sla!.dueBy) {
+    // ❌ Actual SLA breach (deterministic rule)
+    if (now > ticket.sla.dueBy) {
       await prisma.sLA.update({
-        where: { id: ticket.sla!.id },
+        where: { id: ticket.sla.id },
         data: { breached: true },
       });
+
+      console.log(`❌ SLA breached for ticket ${ticket.id}`);
     }
   }
 };

@@ -29,6 +29,8 @@ model Ticket {
 
   confidence  Float?        // AI confidence (later)
 
+   aiRisk       Float? 
+
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   resolvedAt  DateTime?

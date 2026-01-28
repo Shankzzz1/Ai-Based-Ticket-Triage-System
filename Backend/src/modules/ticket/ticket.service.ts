@@ -51,6 +51,7 @@ export const getAllTickets = async () => {
     include: {
       createdBy: true,
       assignedTo: true,
+      sla: true,
     },
   });
 };
@@ -64,6 +65,7 @@ export const getTicketById = async (id: string) => {
     include: {
       createdBy: true,
       assignedTo: true,
+      sla: true,
     },
   });
 };
