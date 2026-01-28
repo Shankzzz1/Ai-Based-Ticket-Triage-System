@@ -1,0 +1,4 @@
+venv/
+ML Service/venv/
+__pycache__/
+*.pyc
