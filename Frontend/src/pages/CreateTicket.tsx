@@ -9,7 +9,7 @@ const CreateTicket: React.FC = () => {
   const handleSuccess = () => {
     setShowSuccess(true);
     setTimeout(() => {
-      navigate('/');
+      navigate('/ticke');
     }, 2000);
   };
 
