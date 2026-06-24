@@ -1,3 +1,4 @@
+// server.ts
 import "dotenv/config";
 import app from "./app";
 import { startSLACron } from "./jobs/sla.cron";

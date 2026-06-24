@@ -1,3 +1,4 @@
+// escalation.service.ts
 import { prisma } from "../../config/db";
 import { TicketPriority } from "@prisma/client";
 

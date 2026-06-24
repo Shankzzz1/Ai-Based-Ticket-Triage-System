@@ -1,7 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-import CreateTicket from './pages/CreateTicket';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import CreateTicket from "./pages/CreateTicket";
+import CreateAgent from './pages/CreateAgent';
 
 const Navigation: React.FC = () => {
   const location = useLocation();
@@ -36,9 +43,9 @@ const Navigation: React.FC = () => {
               <Link
                 to="/"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  location.pathname === '/'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === "/"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Dashboard
@@ -46,12 +53,23 @@ const Navigation: React.FC = () => {
               <Link
                 to="/create"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  location.pathname === '/create'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === "/create"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Create Ticket
+              </Link>
+
+              <Link
+                to="/create-agent"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  location.pathname === "/create-agent"
+                    ? "bg-green-100 text-green-700"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                Create Agent
               </Link>
             </div>
           </div>
@@ -69,6 +87,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/create" element={<CreateTicket />} />
+          <Route path="/create-agent" element={<CreateAgent />} />
         </Routes>
       </div>
     </Router>

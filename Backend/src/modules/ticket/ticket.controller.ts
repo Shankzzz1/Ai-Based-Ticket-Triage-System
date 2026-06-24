@@ -1,7 +1,10 @@
+// ticket.controller.ts 
 import { Request, Response } from "express";
 import * as TicketService from "./ticket.service";
 
 export const create = async (req: Request, res: Response) => {
+  console.log("Incoming Ticket Data");
+  console.log(req.body);
   const ticket = await TicketService.createTicket(req.body);
   res.status(201).json(ticket);
 };

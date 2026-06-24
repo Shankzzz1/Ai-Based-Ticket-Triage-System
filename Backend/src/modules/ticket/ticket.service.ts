@@ -1,3 +1,4 @@
+// ticket.service.ts
 import { prisma } from "../../config/db";
 import { CreateTicketDTO } from "./ticket.types";
 import { classifyTicket } from "./ticket.classifier";
@@ -54,7 +55,19 @@ export const createTicket = async (data: CreateTicketDTO) => {
   const slaDueBy = calculateSLADueTime(classification.priority);
 
   // 5️⃣ Agent assignment
-  const agent = await assignAgent(classification.category);
+  const agent = await assignAgent(
+    classification.category
+  );
+
+  console.log("===========");
+  console.log("Category:", classification.category);
+  console.log("Priority:", classification.priority);
+  console.log("Assigned Agent:", agent?.name);
+  console.log(
+    "Specialization:",
+    agent?.specialization
+  );
+  console.log("===========");
 
   return prisma.ticket.create({
     data: {

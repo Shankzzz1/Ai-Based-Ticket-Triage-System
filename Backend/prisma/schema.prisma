@@ -13,6 +13,7 @@ model User {
   email     String   @unique
   role      UserRole
   createdAt DateTime @default(now())
+  specialization  TicketCategory?
 
   ticketsCreated Ticket[] @relation("CreatedBy")
   ticketsAssigned Ticket[] @relation("AssignedTo")

@@ -1,3 +1,4 @@
+// app.ts
 import express from "express";
 import cors from "cors";
 import ticketRoutes from "./modules/ticket/ticket.routes";
